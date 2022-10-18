@@ -9,13 +9,12 @@ const createUser = (data) => {
                 username: data.username,
                 email: data.email,
             })
-            resolve();
+            resolve({});
         } catch (error) {
             reject(error);
         }
     });
 }
-
 const userById = (id) => {
     return new Promise((resolve, reject) => {
         try {
@@ -27,9 +26,20 @@ const userById = (id) => {
     });
 }
 
-const findAll = () => {
+const update = ({ id, name, username, email }) => {
     return new Promise((resolve, reject) => {
         try {
+            db.map((user) => {
+                if (user.id === Number(id)) {
+                    if (name)
+                        user.name = name;
+                    if (username)
+                        user.username = username;
+                    if (email)
+                        user.email = email;
+                }
+                return user;
+            })
             resolve(db);
         } catch (error) {
             reject(error);
@@ -37,6 +47,17 @@ const findAll = () => {
     });
 }
 
+const findAll = () => {
+    return new Promise((resolve, reject) => {
+        try {
+            resolve(db);
+        } catch (error) {
+            //console.log(error)
+            reject(error);
+        }
+    });
+}
+
 module.exports = {
-    createUser, userById, findAll
+    createUser, userById, findAll, update
 }
