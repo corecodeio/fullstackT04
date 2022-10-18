@@ -1,13 +1,16 @@
 const User = require('./../models/user');
 
 const getUser = async (req, res, next) => {
+    console.log(req.body);
     try {
         const list = await User.findAll();
         //console.log(response);
         if (list)
             return res.status(200).json({ list: list });
     } catch (error) {
-        return res.status(400).json({ error: error });
+        //console.log(error);
+        next(error);
+        //return res.status(400).json({ error: error });
     }
     //res.status(200).json({ message: ' GET USER' });
 }
@@ -19,7 +22,8 @@ const getByID = async (req, res, next) => {
         if (response)
             return res.status(200).json({ list: response });
     } catch (error) {
-        return res.status(400).json({ error: error });
+        next(error);
+        //return res.status(400).json({ error: error });
     }
 }
 
@@ -40,7 +44,8 @@ const postUser = async (req, res, next) => {
             return res.status(200).json({ message: 'created user' });
 
     } catch (error) {
-        return res.status(400).json({ error: error });
+        next(error);
+        //return res.status(400).json({ error: error });
     }
 }
 const patchUser = async (req, res, next) => {
@@ -52,10 +57,38 @@ const patchUser = async (req, res, next) => {
         if (response)
             return res.status(200).json({ list: response });
     } catch (error) {
-        return res.status(400).json({ error: error });
+        next(error);
+        //return res.status(400).json({ error: error });
+    }
+    // return res.status(200).json({ message: 'patch' });
+}
+const deleteUser = async (req, res, next) => {
+    const id = req.params.id
+    /*if (!req.body.id) {
+        return res.status(400).json({ message: 'ID no existe' });
+    }*/
+    try {
+        const response = await User.deleteID(id);
+        if (response)
+            return res.status(200).json({ list: response });
+    } catch (error) {
+        next(error);
+    }
+}
+const putUser = async (req, res, next) => {
+    //console.log(req.body);
+    if (!req.body.id || !req.body.name || !req.body.username || !req.body.email)
+        return res.status(400).json({ message: 'faltan datos' });
+    try {
+        const response = await User.update(req.body);
+        if (response)
+            return res.status(200).json({ list: response });
+    } catch (error) {
+        next(error);
+        //return res.status(400).json({ error: error });
     }
     // return res.status(200).json({ message: 'patch' });
 }
 module.exports = {
-    getUser, getByID, postUser, patchUser
+    getUser, getByID, postUser, patchUser, deleteUser, putUser
 }

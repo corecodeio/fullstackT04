@@ -57,7 +57,22 @@ const findAll = () => {
         }
     });
 }
-
+const deleteID = (id) =>{
+    return new Promise((resolve,reject)=>{
+        try {
+            db.map((user,index)=>{
+                if(user.id === Number(id)){
+                    db.splice(index,1);
+                }
+                return user;
+            });
+            //console.log(db);
+            resolve(db)
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
 module.exports = {
-    createUser, userById, findAll, update
+    createUser, userById, findAll, update, deleteID
 }
