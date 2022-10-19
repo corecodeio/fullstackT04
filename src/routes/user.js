@@ -4,7 +4,6 @@ const { getUser, getByID, postUser, patchUser, deleteUser, putUser } = require('
 
 const middelware = (req, res, next) => {
     //verificacion
-
     const data= {
         datoUno:'daadsdsa',
         datoDos:'dsadsd'
